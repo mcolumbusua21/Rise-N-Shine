@@ -1,0 +1,24 @@
+#fiveday-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+.five-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    background-color: brown;
+    border-radius: 15px;
+    padding: 2rem;
+}
+body{
+    background-color: tan;
+
+}
+h1 {
+    box-sizing: border-box;
+    background-color: brown;
+    height: 100px;
+    padding: 0px;
+    display: flex;
+    justify-content: center;
+}
