@@ -10,13 +10,63 @@ var forecastTitle = document.querySelector("#forecast");
 var forecastContainer = document.querySelector("#fiveday-container");
 var pastSearchButtons = document.querySelector("#past-search-buttons");
 var cities = [];
+var $cityText = document.querySelector("#city-text");
+var currentContainer = document.querySelector("#current-container")
+var histroryContainer = document.querySelector("#history-container");
+var past = JSON.parse(localStorage.getItem("past")) || ""
 // userSearch();
 var lat;
 var lon;
 
 
 
-var formSubmitHandler = function (event) {
+
+function getCurrentWeater(city) {
+    var weatherNow = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${api_key}`;
+    fetch(weatherNow)
+    .then((data) => data.json())
+    .then(function (weather) {
+    //   console.log(weather.list);
+        if (weather.cod === "404"){
+            alert("City not Found");
+            return;
+        }
+        var lat = weather.coord.lat;
+        var lon = weather.coord.lon;
+        var weatherNow = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${api_key}`;
+
+        fetch(weatherNow)
+            .then((data) => data.json())
+            .thenfunction (function (oneCallData) {
+        var mainCard = document.createElement("div");
+        mainCard.classList.add("maincard");
+
+        
+        var cityEl = document.createElement("h2")
+        cityEl.innerText = city + " - "  + new Date().toDateString();
+        mainCard.append(cityEl);
+
+        var uVEl = document.createElement("button")
+        var uvIndex = oneCallData.current.uvi
+        uVEl.innerText = oneCallData.current.uvi;
+        if (uvIndex <= 2) {uVEl.classList.add("favorable")
+
+      }else if (uvIndex >= 5) {uVEl.classList.add("severe")
+    
+      }else {uVEl.classList.add("moderate")}
+
+        mainCard.append(uVEl);
+        currentWeatherContainer
+        currentWeatherContainer.append(mainCard)
+            ;
+    });
+    })};
+  
+
+
+
+
+function formSubmitHandler(event) {
   event.preventDefault();
   var city = $city.value.trim();
   if (city) {
@@ -31,14 +81,13 @@ var formSubmitHandler = function (event) {
   var btn = document.createElement("button");
   btn.innerText = city;
   pastSearchButtons.append(btn);
-};
+}
 var saveSearch = function () {
   localStorage.setItem("cities", JSON.stringify(cities));
 };
 
 function getWeather(city) {
-  var currentWeatherUrl = `"https://api.openweathermap.org/data/2.5/forecast?&units=imperial&appid=885e9149105e8901c9809ac018ce8658&q=" +
-  city;`;
+  var currentWeatherUrl = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${api_key}`;
   fetch(currentWeatherUrl)
     .then((data) => data.json())
     .then(function (weather) {
@@ -90,21 +139,37 @@ function kToF (k){
     return `${fTemp.toFixed()} degrees`
 }
 
-var displayUvIndex = function (index) {
     
-    var uvIndexEL = document.createElement("p");
-    uvIndex.innerText = currentDay
-    if (index.value <= 2) {
-      uvIndexValue.classList = "favorable";
-    } else if (index.value > 2 && index.value <= 8) {
-      uvIndexValue.classList = "moderate";
-    } else if (index.value > 8) {
-      uvIndexValue.classList = "severe";
+    histroryContainer.addEventListener("click", function (e) {
+      e.preventDefault()
+      if (e.target.matches("li")) return;
+      getWeather(e.target.textContent)
+      getFiveDay(e.target.textContent)
+    })
+    $submitBtn.addEventListener("click", formSubmitHandler);
+    
+    $(".sbmtbutton").on("click", function (event){
+      event.preventDefault();
+      var city = $("#city-input").val();
+      handleCity(city);
+      getWeather(city)
+      getFiveDay(city);
+      renderPast()
+    })
+     
+    
+    function handleCity(){
+      if(!past.includes(cityName)) {
+        past.push(cityName)
+      }
+      renderPast()
+      function renderPast(){
+        for (const city of past) {
+          historyContainer.innerHTML = "";
+          var previousCity = document.createElement("li");
+          previousCity.innerText = city
+          histroryContainer.append(previousCity);
+        }
+      }
     }
-  
-    uvIndex.appendChild(uvIndexValue);
-    weatherContainerEl.appendChild(uvIndex);}
-
-
-
-$submitBtn.addEventListener("click", formSubmitHandler);
+    localStorage.setItem("history", JSON.stringify(history));

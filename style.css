@@ -22,3 +22,12 @@ h1 {
     display: flex;
     justify-content: center;
 }
+favorable {
+    background-color: green;
+}
+
+severe {
+    background-color: red;
+}
+
+moderate
