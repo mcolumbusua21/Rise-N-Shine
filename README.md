@@ -11,3 +11,6 @@ This weather app will show you your city's temperature, humidity, UV index and w
 
 # Live Website
  https://mcolumbusua21.github.io/Rise-N-Shine/
+ 
+ # Images
+ ![Screen Shot 2021-03-12 at 8 55 42 AM](https://user-images.githubusercontent.com/78819536/110964715-b4be0700-8310-11eb-8632-b2997532b08c.png)
