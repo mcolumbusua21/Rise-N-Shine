@@ -95,7 +95,7 @@ var saveSearch = function () {
 };
 
 function getWeather(city) {
-  var currentWeatherUrl = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${api_key}`;
+  var currentWeatherUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${api_key}`;
   fetch(currentWeatherUrl)
     .then((data) => data.json())
     .then(function (weather) {
